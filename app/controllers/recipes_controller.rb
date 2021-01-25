@@ -22,6 +22,19 @@ class RecipesController < ApplicationController
   end
 
   def edit
+    @recipe = Recipe.find(params[:id])
+    if @recipe.user_id != current_user.id
+      redirect_to recipes_path, alert: '不正なアクセスです。'
+    end
+  end
+
+  def update
+    @recipe = Recipe.find(params[:id])
+    if @recipe.update(recipe_params)
+      redirect_to recipe_path(@recipe), notice: "編集に成功しました。"
+    else
+      render :edit
+    end
   end
 
   private
